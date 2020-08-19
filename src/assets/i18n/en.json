@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "app": {
+      "title": "File Helper",
+      "banner": "Demo for large file upload",
+      "core": "Core Functional",
+      "subtitle": "Here are some links to help you get started:",
+      "folders": "Folders support",
+      "breakpoint": "Breakpoint Resume",
+      "seconds": "Seconds Upload"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "app": {
+      "title": "文件助手",
+      "banner": "大文件上传功能演示",
+      "core": "核心功能",
+      "subtitle": "下面的链接展示核心的功能",
+      "folders": "文件夹上传",
+      "breakpoint": "断点续传",
+      "seconds": "大文件秒传"
+    }
+  }
+}
