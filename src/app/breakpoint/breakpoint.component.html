@@ -1,0 +1,17 @@
+<div class="content">
+    <mat-card>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <input type="file" (click)="handleFileChange()">
+                    <button (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
+                    <button (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
+                </div>
+                <div class="col-sm-8">
+            
+                </div>
+            </div>
+        </div>
+    </mat-card>
+    <mat-divider [vertical]="true"></mat-divider>
+</div>

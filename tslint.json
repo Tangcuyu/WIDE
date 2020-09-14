@@ -19,13 +19,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "zsim",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "zsim",
       "kebab-case"
     ],
     "eofline": true,

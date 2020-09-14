@@ -7,7 +7,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AgGridModule } from 'ag-grid-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BreakpointModule } from './breakpoint/breakpoint.module';
+import { HomeModule } from './home/home.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -19,6 +22,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AppComponent
   ],
   imports: [
+    AgGridModule.withComponents([]),
     BrowserModule,
     HttpClientModule,
     MaterialModule,
@@ -30,7 +34,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient]
       }
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    BreakpointModule,
+    HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

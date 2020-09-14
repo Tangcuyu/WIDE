@@ -1,13 +1,27 @@
 {
   "pages": {
     "app": {
+      "lang": "Chinese",
       "title": "File Helper",
       "banner": "Demo for large file upload",
       "core": "Core Functional",
       "subtitle": "Here are some links to help you get started:",
       "folders": "Folders support",
       "breakpoint": "Breakpoint Resume",
-      "seconds": "Seconds Upload"
+      "seconds": "Seconds Upload",
+      "next": "Next Steps",
+      "subnext": "What do you want to do next with our WEBUI team?",
+      "comlib": "Component Library",
+      "security": "Web Security",
+      "j2go": "Java to GO",
+      "cluster": "Web service optimize in Cluster",
+      "clientnet": "Bandwidth Self-adaption",
+      "clientvpn": "Wireguard in Client"
+    },
+    "breakpoint": {
+      "btnupload": "Upload",
+      "btnpause": "Pause",
+      "btnresume": "Resume"
     }
   }
 }
