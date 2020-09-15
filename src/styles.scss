@@ -75,6 +75,10 @@ p {
   align-items: center;
 }
 
+.upload {
+  margin-top: 82px;
+}
+
 svg.material-icons {
   height: 24px;
   width: auto;
@@ -301,3 +305,6 @@ svg#clouds {
     visibility: hidden;
   }
 }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

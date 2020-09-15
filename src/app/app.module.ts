@@ -11,6 +11,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreakpointModule } from './breakpoint/breakpoint.module';
 import { HomeModule } from './home/home.module';
+import { LayoutModule } from './layout/layout.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -36,7 +38,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     }),
     BrowserAnimationsModule,
     BreakpointModule,
-    HomeModule
+    HomeModule,
+    LayoutModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

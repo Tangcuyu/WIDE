@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'zsim-breakpoint',
@@ -6,10 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./breakpoint.component.scss']
 })
 export class BreakpointComponent implements OnInit {
+  @ViewChild('file', { static: false }) file;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  public handleFileChange() {
+    const files: { [key: string]: File } = this.file.nativeElement.files;
+    console.log(files);
   }
 
   public handleResume() {
@@ -20,8 +26,6 @@ export class BreakpointComponent implements OnInit {
 
   }
 
-  public handleFileChange() {
-
-  }
+  
 
 }

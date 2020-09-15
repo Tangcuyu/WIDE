@@ -1,17 +1,13 @@
-<div class="content">
-    <mat-card>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <input type="file" (click)="handleFileChange()">
-                    <button (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
-                    <button (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
-                </div>
-                <div class="col-sm-8">
-            
-                </div>
-            </div>
+<div class="container">
+    <div class="row upload">
+        <div class="col-sm-6">
+            <mat-card>
+                <input type="file" #file multiple (change)="handleFileChange()">
+                <button class="btn btn-primary" style="margin-right: 5px;"
+                    (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
+                <button class="btn btn-warning"
+                    (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
+            </mat-card>
         </div>
-    </mat-card>
-    <mat-divider [vertical]="true"></mat-divider>
+    </div>
 </div>
