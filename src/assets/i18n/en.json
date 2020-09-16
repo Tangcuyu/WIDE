@@ -14,14 +14,16 @@
       "comlib": "Component Library",
       "security": "Web Security",
       "j2go": "Java to GO",
-      "cluster": "Web service optimize in Cluster",
+      "cluster": "Web service optimize",
       "clientnet": "Bandwidth Self-adaption",
       "clientvpn": "Wireguard in Client"
     },
     "breakpoint": {
       "btnupload": "Upload",
       "btnpause": "Pause",
-      "btnresume": "Resume"
+      "btnresume": "Resume",
+      "titlehash": "Hash Compute for slice",
+      "totalprogress": "Total Progress"
     }
   }
 }

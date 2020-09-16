@@ -26,6 +26,4 @@ export class BreakpointComponent implements OnInit {
 
   }
 
-  
-
 }

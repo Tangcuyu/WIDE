@@ -21,7 +21,9 @@
     "breakpoint": {
       "btnupload": "上传",
       "btnpause": "暂停",
-      "btnresume": "恢复"
+      "btnresume": "恢复",
+      "titlehash": "计算切片hash值",
+      "totalprogress": "总进度"
     }
   }
 }
