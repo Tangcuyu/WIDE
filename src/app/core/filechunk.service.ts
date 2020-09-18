@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import SparkMD5 from 'spark-md5';
 
 @Injectable({
   providedIn: 'root'
@@ -19,4 +20,7 @@ export class FilechunkService {
     }
     return fileChunkList;
   }
+
+  // 利用window.requestIdleCallback()方法对切片进行Hash计算
+  public async calculateFileHashIdle() {}
 }

@@ -1,18 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { FilechunkService } from '../core/filechunk.service';
+import { Chunk, Status } from '../models/model';
 
-interface Chunk {
-  progress: number;
-}
 
-enum Status {
-  Wait,
-  Pause,
-  Uploading,
-  Error,
-  Done,
-}
 
 @Component({
   selector: 'zsim-breakpoint',
