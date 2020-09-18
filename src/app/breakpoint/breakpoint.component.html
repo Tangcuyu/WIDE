@@ -3,8 +3,8 @@
         <div class="col-sm-6">
             <div style="height: 40px;"></div>
             <mat-card>
-                <input type="file" #file multiple (change)="handleFileChange()">
-                <button class="btn btn-primary" style="margin-right: 5px;"
+                <input type="file" #file (change)="handleFileChange()">
+                <button class="btn btn-primary" style="margin-right: 10px; margin-left: 70px;"
                     (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
                 <button class="btn btn-warning"
                     (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
@@ -20,4 +20,14 @@
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
     </div>
     <mat-progress-bar mode="determinate" value="30" color="warn"></mat-progress-bar>
+    <div class="m-t">
+        <div class="cube-container">
+            <div *ngFor="let chunk of chunks;" class="cube">
+                <div class="success" [ngStyle]="getChunkStyle(chunk)">
+    
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>

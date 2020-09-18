@@ -10,3 +10,35 @@
 .m-b {
   margin-bottom: 1.5rem;
 }
+
+.cube-container{
+  width: 100%;
+  overflow: hidden;
+}
+  
+.cube {
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  border: 0.5px solid rgba(27,31,35,.04);
+  background:  #ebedf0;
+  float: left;
+  margin: 1px;
+  >.success {
+    background: #9be9a8
+  }
+    
+  >.uploading {
+    background: #409EFF
+  }
+    
+  >.error{
+    background: #F56C6C
+  }
+    
+}
+
+.border {
+  border: 1px solid #e1e4e8!important;
+}
+  
