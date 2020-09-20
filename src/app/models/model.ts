@@ -1,6 +1,8 @@
-export interface Chunk {
-  progress: number;
-  hash?: string;
+export class Chunk {
+  constructor(
+    public progress: number = 0,
+    public hash = ''
+  ) {}
 }
 
 export enum Status {
@@ -9,4 +11,12 @@ export enum Status {
   Uploading,
   Error,
   Done,
+}
+
+export class Container {
+  constructor(
+    public file: File = null,
+    public hash: string = '',
+    public worker: Worker = null,
+  ) {}
 }

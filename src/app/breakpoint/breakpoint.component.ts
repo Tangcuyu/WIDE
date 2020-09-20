@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { FilechunkService } from '../core/filechunk.service';
-import { Chunk, Status } from '../models/model';
+import { Chunk, Status, Container } from '../models/model';
 
 
 
@@ -13,32 +13,38 @@ import { Chunk, Status } from '../models/model';
 export class BreakpointComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
   public chunks = [];
-  public container = { file: File };
+  public container: Container = new Container();
   public chunkSize = 1 * 1024 * 1024;
+  public hashPercentage: number;
 
-  constructor(private fileChunk: FilechunkService) { }
+  constructor(private fileChunkService: FilechunkService) { }
 
   ngOnInit(): void {
   }
 
+  // 在文件选择框中把选择的文件放入 container 属性中；
   public handleFileChange() {
-    const [file] = this.file.nativeElement.files;
-    if (!file) {
+    const [selectedfile] = this.file.nativeElement.files;
+    if (!selectedfile) {
       return;
     }
-    this.container.file = file;
+    this.container.file = selectedfile;
   }
 
   public handleResume() {
 
   }
 
-  public handleUpload() {
+  // 处理上传文件按钮点击事件
+  public async handleUpload() {
     if (!this.container.file) {
       return;
     }
-    this.chunks = this.fileChunk.createFileChunk(this.container.file, this.chunkSize);
+    this.chunks = this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
     console.log(this.chunks);
+    await this.fileChunkService.calculateFileHashIdle(this.chunks);
+    // console.log(this.fileChunkService.hashPercentage);
+    // this.hashPercentage = this.fileChunk.hashPercentage;
 
   }
 

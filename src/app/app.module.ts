@@ -8,12 +8,14 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { AppWorker } from './app.worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreakpointModule } from './breakpoint/breakpoint.module';
 import { HomeModule } from './home/home.module';
 import { LayoutModule } from './layout/layout.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CoreModule } from './core/core.module';
+import { WorkerModule } from 'angular-web-worker/angular';
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -37,12 +39,14 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient]
       }
     }),
+    WorkerModule.forWorkers([
+      { worker: AppWorker, initFn: () => new Worker('./app.worker.ts', { type: 'module' }) },
+    ]),
     BrowserAnimationsModule,
     BreakpointModule,
     HomeModule,
     LayoutModule,
     NgbModule,
-    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
