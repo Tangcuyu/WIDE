@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 
 @Component({
   selector: 'zsim-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   public title = 'upfile-web';
   public language: string;
 
+
   constructor(
-    private translateService: TranslateService
+    private translateService: TranslateService,
   ) {
     // --- set i18n begin --- 翻译组件
     this.translateService.addLangs(['zh', 'en']);
@@ -21,4 +21,6 @@ export class AppComponent {
     this.translateService.use(browserLang.match(/zh|en/) ? browserLang : 'zh');
     // --- set i18n end ---
   }
+
+  ngOnInit() {}
 }

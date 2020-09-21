@@ -30,6 +30,20 @@ export class FilechunkService {
     return new Promise(resolve => {
       const spark = new SparkMD5.ArrayBuffer();
       console.log(spark);
+      const count = 0;
+
+      const appendToSpark = async (file) => {
+        return new Promise( (aresolve) => {
+          const reader = new FileReader();
+          reader.readAsArrayBuffer(file);
+          reader.onload = (e) => {
+            spark.append(e.target.result);
+            aresolve();
+          };
+        });
+      };
+
+      const workLoop = () => {};
     });
   }
 
