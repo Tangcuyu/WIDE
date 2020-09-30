@@ -21,6 +21,7 @@
     "breakpoint": {
       "btnupload": "Upload",
       "btnpause": "Pause",
+      "btnslice": "Slice",
       "btnresume": "Resume",
       "titlehash": "Hash Compute for slice",
       "totalprogress": "Total Progress"

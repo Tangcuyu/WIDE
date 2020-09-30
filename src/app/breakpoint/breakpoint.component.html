@@ -1,19 +1,23 @@
 <div class="container">
     <div class="row upload">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <div style="height: 40px;"></div>
             <mat-card>
                 <input type="file" #file (change)="handleFileChange()">
-                <button class="btn btn-primary" style="margin-right: 10px; margin-left: 70px;"
-                    (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
-                <button class="btn btn-warning"
-                    (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
+                <div class="btn-group" style="margin-left: 80px;">
+                    <button class="btn btn-success" style="margin-right: 10px; margin-left: 70px;"
+                        (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
+                    <button class="btn btn-primary" style="margin-right: 10px;"
+                        (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
+                    <button class="btn btn-warning"
+                        (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
+                </div>
             </mat-card>
         </div>
     </div>
     <mat-divider></mat-divider>
     <div class="m-t m-b">
-        <h5>{{'pages.breakpoint.titlehash' | translate}}</h5>
+        <h5>{{'pages.breakpoint.titlehash' | translate}}: {{this.container.hash}}</h5>
     </div>
     <mat-progress-bar mode="determinate" [value]="hashPercentage"></mat-progress-bar>
     <div class="m-t m-b">
@@ -24,10 +28,10 @@
         <div class="cube-container">
             <div *ngFor="let chunk of chunks;" class="cube">
                 <div class="success" [ngStyle]="getChunkStyle(chunk)">
-    
+
                 </div>
             </div>
         </div>
     </div>
-    
+
 </div>
