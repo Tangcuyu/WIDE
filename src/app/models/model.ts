@@ -25,3 +25,9 @@ export class Container {
     public worker: Worker = null,
   ) {}
 }
+
+export class AppConst {
+  public static readonly STORE_API_PATHS = {
+      verifyUpload: '/verify'
+  };
+}

@@ -5,21 +5,24 @@ import { WorkerManager, WorkerClient } from 'angular-web-worker/angular';
 
 import { ChunkStatus, Status, Container } from '../models/model';
 import { FilechunkService } from '../core/filechunk.service';
-import { Observable, of, Subscription } from 'rxjs';
+import { FileUploadService } from '../core/fileupload.service';
 
 @Component({
   selector: 'zsim-breakpoint',
   templateUrl: './breakpoint.component.html',
   styleUrls: ['./breakpoint.component.scss']
 })
-export class BreakpointComponent implements OnInit, OnDestroy{
+export class BreakpointComponent implements OnInit, OnDestroy {
   @ViewChild('file', { static: false }) file;
   public status: Status = Status.Normal;
   public container: Container = new Container();
   public chunkSize = 2 * 1024 * 1024;
   private client: WorkerClient<AppWorker>;
 
-  constructor(private fileChunkService: FilechunkService, private workerManager: WorkerManager) { }
+  constructor(
+    private fileChunkService: FilechunkService,
+    private workerManager: WorkerManager,
+    private fileUploadService: FileUploadService) { }
 
   ngOnInit() {
     if (this.workerManager.isBrowserCompatible) {
@@ -41,9 +44,7 @@ export class BreakpointComponent implements OnInit, OnDestroy{
     this.container.hash = [];
     this.container.chunkstatus.hash = '';
     this.container.chunkstatus.progress = 0;
-    // this.container = new Container();
     this.container.file = selectedfile;
-    console.log(this.container);
   }
 
   // 对选择的文件进行切片
@@ -52,7 +53,6 @@ export class BreakpointComponent implements OnInit, OnDestroy{
       return;
     }
     this.container.fileChunks = await this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
-    console.log(this.container);
   }
 
   public async hashCalculate() {
@@ -60,9 +60,8 @@ export class BreakpointComponent implements OnInit, OnDestroy{
       return;
     }
     if (this.status === Status.WaitHash) {
-      this.status =  await this.createWorker();
+      this.status = await this.createWorker();
     }
-    console.log(this.container);
   }
 
   // 使用web worker计算每个切片及整个文件的HASH值
@@ -90,9 +89,14 @@ export class BreakpointComponent implements OnInit, OnDestroy{
 
   // 处理上传文件按钮点击事件
   public async handleUpload() {
-    // console.log(this.fileChunkService.hashPercentage);
-    // await this.handleSlice();
-
+    if (!this.container.file) {
+      return;
+    }
+    this.status = Status.Uploading;
+    // const { shouldUpload, uploadedList } = await this.fileUploadService.verifyUpload();
+    this.fileUploadService.verifyUpload(this.container.file).subscribe((d) => {
+      console.log(d);
+    });
   }
 
   public getChunkClass(chunk: ChunkStatus) {
