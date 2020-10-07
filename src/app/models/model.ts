@@ -1,4 +1,4 @@
-export class Chunk {
+export class ChunkStatus {
   constructor(
     public progress: number = 0,
     public hash = ''
@@ -6,7 +6,9 @@ export class Chunk {
 }
 
 export enum Status {
-  Wait,
+  Normal,
+  WaitHash,
+  Busy,
   Pause,
   Uploading,
   Error,
@@ -16,7 +18,10 @@ export enum Status {
 export class Container {
   constructor(
     public file: File = null,
-    public hash: string = '',
+    public fileChunks = [],
+    public files: File[] = [],
+    public chunkstatus: ChunkStatus = new ChunkStatus(),
+    public hash: string[] = [],
     public worker: Worker = null,
   ) {}
 }

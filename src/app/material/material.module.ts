@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 
 
@@ -17,6 +19,7 @@ const Material = [
   MatProgressBarModule,
   MatIconModule,
   MatInputModule,
+  MatTooltipModule,
 ];
 @NgModule({
   imports: [

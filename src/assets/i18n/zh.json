@@ -23,6 +23,10 @@
       "btnpause": "暂停",
       "btnslice": "切片",
       "btnresume": "恢复",
+      "hashcalculate": "Hash",
+      "chunknumber":"切片数量",
+      "titleslice": "文件切片",
+      "filehash":"整个文件的Hash值",
       "titlehash": "计算切片hash值",
       "totalprogress": "总进度"
     }

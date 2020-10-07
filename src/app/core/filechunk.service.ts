@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import SparkMD5 from 'spark-md5';
 
-import { Container, Chunk } from '../models/model';
+import { Container, ChunkStatus } from '../models/model';
 
 @Injectable({
   providedIn: 'root'

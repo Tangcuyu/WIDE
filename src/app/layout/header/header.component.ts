@@ -18,7 +18,6 @@ export class HeaderComponent implements OnInit {
   // public methods 界面语言切换
   public changeLanguage() {
     this.language = this.translateService.currentLang;
-    console.log(this.language);
     if (this.language === 'zh') {
       this.translateService.use('en');
     } else {

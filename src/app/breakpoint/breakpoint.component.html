@@ -1,37 +1,55 @@
 <div class="container">
     <div class="row upload">
-        <div class="col-sm-8">
-            <div style="height: 40px;"></div>
+        <div class="col-sm-9">
+            <div style="height: 40px;">{{this.status}}</div>
             <mat-card>
                 <input type="file" #file (change)="handleFileChange()">
                 <div class="btn-group" style="margin-left: 80px;">
                     <button class="btn btn-success" style="margin-right: 10px; margin-left: 70px;"
                         (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
+                    <button class="btn btn-info" style="margin-right: 10px;"
+                        [disabled]="this.container.fileChunks.length === 0"
+                        (click)="hashCalculate()">{{'pages.breakpoint.hashcalculate' | translate}}</button>
                     <button class="btn btn-primary" style="margin-right: 10px;"
                         (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
+                    <button class="btn btn-danger" style="margin-right: 10px;"
+                        (click)="handlePause()">{{'pages.breakpoint.btnpause' | translate}}</button>
                     <button class="btn btn-warning"
-                        (click)="handleResume()">{{'pages.breakpoint.btnpause' | translate}}</button>
+                        (click)="handleResume()">{{'pages.breakpoint.btnresume' | translate}}</button>
                 </div>
             </mat-card>
         </div>
     </div>
     <mat-divider></mat-divider>
     <div class="m-t m-b">
-        <h5>{{'pages.breakpoint.titlehash' | translate}}: {{this.container.hash}}</h5>
+        <h5>{{'pages.breakpoint.titleslice' | translate}}</h5>
     </div>
-    <mat-progress-bar mode="determinate" [value]="hashPercentage"></mat-progress-bar>
+    <div class="m-t m-b">
+        <div class="cube-container">
+            <div *ngFor="let chunk of this.container.fileChunks;">
+                <!-- <button class="cube" [matTooltip]="hash" matTooltipPosition="above"></button>  -->
+                <button class="cube"></button>
+            </div>
+        </div>
+    </div>
+    <h5>{{'pages.breakpoint.chunknumber' | translate}} : {{this.container.fileChunks.length}}</h5>
+    <div class="m-t m-b">
+        <h5>{{'pages.breakpoint.titlehash' | translate}}</h5>
+    </div>
+    <div class="m-t m-b">
+        <div class="cube-container">
+            <div *ngFor="let hash of this.container.hash;">
+                <button class="cube" style="background-color: #9be9a8;" [matTooltip]="hash"
+                    matTooltipPosition="above"></button>
+            </div>
+        </div>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="this.container.chunkstatus.progress"></mat-progress-bar>
+    <div class="m-t m-b" *ngIf="this.container.chunkstatus.progress === 100">
+        <h5>{{'pages.breakpoint.filehash' | translate}} : {{this.container.chunkstatus.hash}}</h5>
+    </div>
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
     </div>
     <mat-progress-bar mode="determinate" value="30" color="warn"></mat-progress-bar>
-    <div class="m-t">
-        <div class="cube-container">
-            <div *ngFor="let chunk of chunks;" class="cube">
-                <div class="success" [ngStyle]="getChunkStyle(chunk)">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
