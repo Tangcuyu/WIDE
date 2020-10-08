@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
 import { ApiProvider } from './api.service';
-import { AppConst } from '../models/model';
+import { AppConst, UploadVerifyResponse } from '../models/model';
 import { environment } from '../../environments/environment';
 
 // TODO: This is prepare for the i18n
@@ -24,9 +24,12 @@ export class FileUploadService {
 
   constructor(public apiProvider: ApiProvider) { }
 
-  public verifyUpload(data: any): Observable<Response>  {
+  // 验证上传的文件和HASH是否已经在服务器端存在，如果已经存在就是秒传
+  public verifyUpload(filename: string, fileHash: string): Observable<UploadVerifyResponse>  {
     const verifyUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.verifyUpload;
-    return this.apiProvider.httpPost(verifyUploadUrl, data, httpOptions)
+    const data = JSON.stringify({filename, fileHash});
+    console.log(data);
+    return this.apiProvider.httpPost(verifyUploadUrl, data , httpOptions)
     .pipe(
       catchError(this.handelError)
     );

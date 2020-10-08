@@ -1,3 +1,17 @@
+export interface UploadVerifyResponse {
+  shouldUpload: boolean;
+  uploadedList: string[];
+}
+
+export interface UploadData {
+  fileHash: string;
+  index: number;
+  hash: string;
+  file: Blob;
+  size: number;
+  percentage: number;
+}
+
 export class ChunkStatus {
   constructor(
     public progress: number = 0,

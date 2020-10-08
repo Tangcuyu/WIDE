@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppWorker } from '../app.worker';
 import { WorkerManager, WorkerClient } from 'angular-web-worker/angular';
 
-import { ChunkStatus, Status, Container } from '../models/model';
+import { ChunkStatus, Container, Status, UploadData } from '../models/model';
 import { FilechunkService } from '../core/filechunk.service';
 import { FileUploadService } from '../core/fileupload.service';
 
@@ -18,109 +18,133 @@ export class BreakpointComponent implements OnInit, OnDestroy {
   public container: Container = new Container();
   public chunkSize = 2 * 1024 * 1024;
   private client: WorkerClient<AppWorker>;
+  private uploadData: UploadData[];
+  private uploadedList = [];
+  private shouldUpload: boolean;
 
-  constructor(
-    private fileChunkService: FilechunkService,
-    private workerManager: WorkerManager,
-    private fileUploadService: FileUploadService) { }
+constructor(
+  private fileChunkService: FilechunkService,
+  private workerManager: WorkerManager,
+  private fileUploadService: FileUploadService) { }
 
-  ngOnInit() {
-    if (this.workerManager.isBrowserCompatible) {
-      this.client = this.workerManager.createClient(AppWorker);
-    } else {
-      // 如果浏览器不兼容web worker，那么在worker中的代码就运行在主线程中
-      this.client = this.workerManager.createClient(AppWorker, true);
-    }
+ngOnInit() {
+  if (this.workerManager.isBrowserCompatible) {
+    this.client = this.workerManager.createClient(AppWorker);
+  } else {
+    // 如果浏览器不兼容web worker，那么在worker中的代码就运行在主线程中
+    this.client = this.workerManager.createClient(AppWorker, true);
   }
+}
 
   // 在文件选择框中把选择的文件放入 container 属性中；
   public handleFileChange() {
-    this.status = Status.WaitHash;
-    const [selectedfile] = this.file.nativeElement.files;
-    if (!selectedfile) {
-      return;
-    }
-    this.container.fileChunks = [];
-    this.container.hash = [];
-    this.container.chunkstatus.hash = '';
-    this.container.chunkstatus.progress = 0;
-    this.container.file = selectedfile;
+  this.status = Status.WaitHash;
+  const [selectedfile] = this.file.nativeElement.files;
+  if (!selectedfile) {
+    return;
   }
+  this.container.fileChunks = [];
+  this.container.hash = [];
+  this.container.chunkstatus.hash = '';
+  this.container.chunkstatus.progress = 0;
+  this.container.file = selectedfile;
+}
 
   // 对选择的文件进行切片
   public async handleSlice() {
-    if (!this.container.file) {
-      return;
-    }
-    this.container.fileChunks = await this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
+  if (!this.container.file) {
+    return;
   }
+  this.container.fileChunks = await this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
+}
 
   public async hashCalculate() {
-    if (this.container.fileChunks.length === 0) {
-      return;
-    }
-    if (this.status === Status.WaitHash) {
-      this.status = await this.createWorker();
-    }
+  if (this.container.fileChunks.length === 0) {
+    return;
   }
-
-  // 使用web worker计算每个切片及整个文件的HASH值
-  async createWorker() {
-    const arrh = [];
-    await this.client.connect();
-    await this.client.call(w => w.calculatefileHash(this.container.fileChunks));
-    await this.client.subscribe(w => w.event, (no) => {
-      this.container.chunkstatus.progress = no.percentage;
-      this.container.chunkstatus.hash = no.hash;
-      arrh.push(no.hash);
-    });
-    this.container.hash = arrh;
-    return Status.Normal;
+  if (this.status === Status.WaitHash) {
+    this.status = await this.createWorker();
+    console.log(this.status);
+    console.log(this.container);
   }
+}
 
-  public handleResume() {
-
-  }
-
-  public handlePause() {
-
-  }
-
+// 使用web worker计算每个切片及整个文件的HASH值
+async createWorker() {
+  const arrh = [];
+  await this.client.connect();
+  await this.client.call(w => w.calculatefileHash(this.container.fileChunks));
+  await this.client.subscribe(w => w.event, (no) => {
+    this.container.chunkstatus.progress = no.percentage;
+    this.container.chunkstatus.hash = no.hash;
+    arrh.push(no.hash);
+  });
+  this.container.hash = arrh;
+  return Status.Normal;
+}
 
   // 处理上传文件按钮点击事件
   public async handleUpload() {
-    if (!this.container.file) {
+  if (!this.container.file) {
+    return;
+  }
+  this.status = Status.Uploading;
+  // 秒传的检验
+  this.fileUploadService.verifyUpload(this.container.file.name, this.container.chunkstatus.hash).subscribe((d) => {
+    if (!d.shouldUpload) {
+      console.log('"秒传：上传成功"');
+      this.status = Status.Normal;
       return;
     }
-    this.status = Status.Uploading;
-    // const { shouldUpload, uploadedList } = await this.fileUploadService.verifyUpload();
-    this.fileUploadService.verifyUpload(this.container.file).subscribe((d) => {
-      console.log(d);
-    });
-  }
+    this.shouldUpload = d.shouldUpload;
+    this.uploadedList = d.uploadedList;
+  });
+
+  this.uploadData = this.container.fileChunks.map(({ file }, index): UploadData => {
+    return {
+      fileHash: this.container.hash[index],
+      index,
+      hash: this.container.hash[index] + '-' + index,
+      file,
+      size: file.size,
+      percentage: this.uploadedList.includes(index) ? 100 : 0,
+    };
+  });
+
+  console.log(this.uploadData);
+}
+
+
+  public handleResume() {
+
+}
+
+  public handlePause() {
+
+}
 
   public getChunkClass(chunk: ChunkStatus) {
-    return {
-      uploading: chunk.progress > 0 && chunk.progress < 100,
-      success: chunk.progress === 100,
-      error: chunk.progress < 0,
-    };
-  }
+  return {
+    uploading: chunk.progress > 0 && chunk.progress < 100,
+    success: chunk.progress === 100,
+    error: chunk.progress < 0,
+  };
+}
 
   public getChunkStyle(chunk: ChunkStatus) {
-    if (!chunk.progress) {
-      return;
-    }
-    chunk.progress = 100;
-    return {
-      height: chunk.progress,
-      color: '#9be9a8'
-    };
+  if (!chunk.progress) {
+    return;
   }
+  chunk.progress = 100;
+  return {
+    height: chunk.progress,
+    color: '#9be9a8'
+  };
+}
 
 
-  ngOnDestroy() {
-    this.client.destroy();
-  }
+ngOnDestroy() {
+  this.client.destroy();
+}
 
 }

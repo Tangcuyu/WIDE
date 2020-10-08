@@ -6,11 +6,13 @@
                 <input type="file" #file (change)="handleFileChange()">
                 <div class="btn-group" style="margin-left: 80px;">
                     <button class="btn btn-success" style="margin-right: 10px; margin-left: 70px;"
+                        [disabled]="!this.container.file"
                         (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
                     <button class="btn btn-info" style="margin-right: 10px;"
                         [disabled]="this.container.fileChunks.length === 0"
                         (click)="hashCalculate()">{{'pages.breakpoint.hashcalculate' | translate}}</button>
                     <button class="btn btn-primary" style="margin-right: 10px;"
+                        [disabled]="this.container.chunkstatus.progress !== 100"
                         (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
                     <button class="btn btn-danger" style="margin-right: 10px;"
                         (click)="handlePause()">{{'pages.breakpoint.btnpause' | translate}}</button>
@@ -34,7 +36,8 @@
     </div>
     <h5>{{'pages.breakpoint.chunknumber' | translate}} : {{this.container.fileChunks.length}}</h5>
     <div class="m-t m-b">
-        <h5>{{'pages.breakpoint.titlehash' | translate}}</h5><div>(鼠标悬停在进度块上可以看到切片的hash值)</div>
+        <h5>{{'pages.breakpoint.titlehash' | translate}}</h5>
+        <div>(鼠标悬停在进度块上可以看到切片的hash值)</div>
     </div>
     <div class="m-t m-b">
         <div class="cube-container">
