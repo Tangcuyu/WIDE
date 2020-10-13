@@ -1,14 +1,15 @@
 export interface UploadVerifyResponse {
-  shouldUpload: boolean;
+  uploaded: boolean;
   uploadedList: string[];
 }
 
 export interface UploadData {
+  filename: string;
   fileHash: string;
-  index: number;
-  hash: string;
-  file: Blob;
-  size: number;
+  chunkIndex: number;
+  chunkHash: string;
+  chunk: Blob;
+  chunkSize: number;
   percentage: number;
 }
 
@@ -42,6 +43,7 @@ export class Container {
 
 export class AppConst {
   public static readonly STORE_API_PATHS = {
-      verifyUpload: '/verify'
+      verifyUpload: '/verify',
+      chunkUpload: '/upload'
   };
 }

@@ -1,4 +1,5 @@
 {
+  "0":"普通状态",
   "pages": {
     "app": {
       "lang": "英语",
@@ -24,6 +25,7 @@
       "btnslice": "切片",
       "btnresume": "恢复",
       "hashcalculate": "Hash",
+      "hashsubtitle":"(鼠标悬停在进度块上可以看到切片的hash值)",
       "chunknumber":"切片数量",
       "titleslice": "文件切片",
       "filehash":"整个文件的Hash值",

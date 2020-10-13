@@ -1,4 +1,5 @@
 {
+  "0":"Normal",
   "pages": {
     "app": {
       "lang": "Chinese",
@@ -23,7 +24,8 @@
       "btnpause": "Pause",
       "btnslice": "Slice",
       "btnresume": "Resume",
-      "hashcalculate": "Hash Calculate",
+      "hashcalculate": "Hash",
+      "hashsubtitle":"(You can get hash value when you hovering)",
       "chunknumber":"Chunk number",
       "titleslice": "File Slice",
       "filehash":"Final File Hash",

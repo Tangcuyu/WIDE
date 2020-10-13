@@ -1,10 +1,10 @@
 <div class="container">
     <div class="row upload">
         <div class="col-sm-9">
-            <div style="height: 40px;">{{this.status}}</div>
+            <div style="height: 40px;">{{this.status.toString() | translate}}</div>
             <mat-card>
                 <input type="file" #file (change)="handleFileChange()">
-                <div class="btn-group" style="margin-left: 80px;">
+                <div class="btn-group">
                     <button class="btn btn-success" style="margin-right: 10px; margin-left: 70px;"
                         [disabled]="!this.container.file"
                         (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
@@ -37,7 +37,7 @@
     <h5>{{'pages.breakpoint.chunknumber' | translate}} : {{this.container.fileChunks.length}}</h5>
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.titlehash' | translate}}</h5>
-        <div>(鼠标悬停在进度块上可以看到切片的hash值)</div>
+        <div>{{'pages.breakpoint.hashsubtitle' | translate}}</div>
     </div>
     <div class="m-t m-b">
         <div class="cube-container">
