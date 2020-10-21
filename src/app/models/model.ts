@@ -1,6 +1,12 @@
+import { Observable } from 'rxjs';
+
 export interface UploadVerifyResponse {
   uploaded: boolean;
   uploadedList: string[];
+}
+
+export interface UploadChunkResponse {
+  [key: string]: { progress: Observable<number> };
 }
 
 export interface UploadData {
@@ -11,6 +17,12 @@ export interface UploadData {
   chunk: Blob;
   chunkSize: number;
   percentage: number;
+}
+
+export interface UploadFormData {
+  formData: FormData;
+  filename: string;
+  chunkHash: string;
 }
 
 export class ChunkStatus {
@@ -44,6 +56,7 @@ export class Container {
 export class AppConst {
   public static readonly STORE_API_PATHS = {
       verifyUpload: '/verify',
-      chunkUpload: '/upload'
+      chunkUpload: '/upload',
+      chunkMerge: '/merge'
   };
 }

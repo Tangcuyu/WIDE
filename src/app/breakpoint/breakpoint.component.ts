@@ -6,6 +6,7 @@ import { WorkerManager, WorkerClient } from 'angular-web-worker/angular';
 import { ChunkStatus, Container, Status, UploadData } from '../models/model';
 import { FilechunkService } from '../core/filechunk.service';
 import { FileUploadService } from '../core/fileupload.service';
+import { error } from 'protractor';
 
 @Component({
   selector: 'zsim-breakpoint',
@@ -83,31 +84,12 @@ export class BreakpointComponent implements OnInit, OnDestroy {
   }
 
   // 处理上传
-  public async handleUpload() {
+  public handleUpload() {
     if (!this.container.file) {
       return;
     }
     this.status = Status.Uploading;
-    // console.log(this.container.fileChunks);
-    // 秒传的检验
-    await this.fileUploadService.verifyUpload(this.container.file.name, this.container.chunkstatus.hash).subscribe((d) => {
-      if (d.uploaded) {
-        console.log('"秒传：上传成功"');
-        this.status = Status.Normal;
-        return;
-      }
-      this.shouldUpload = !d.uploaded;
-      this.uploadedList = d.uploadedList;
-    });
-    // 准备上传数据
-    await this.fileUploadService.prepareUploadData(this.container, this.uploadedList).subscribe((d) => {
-      this.uploadData = d;
-      
-    });
-    await this.fileUploadService.uploadChunks(this.uploadData, this.uploadedList);
-    // const files = new Set<File>();
-    // files.add(this.container.file);
-    // this.fileUploadService.uploadFiles(files);
+    // this.fileUploadService.uploadChunks(this.container);
   }
 
 
