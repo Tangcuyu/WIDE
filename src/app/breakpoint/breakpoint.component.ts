@@ -37,17 +37,14 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 在文件选择框中把选择的文件放入 container 属性中；
+  // 选择文件后，初始化container，并把在文件选择框中把选择的文件放入 container 属性中；
   public handleFileChange() {
-    this.status = Status.WaitHash;
+    this.status = Status.Normal;
     const [selectedfile] = this.file.nativeElement.files;
     if (!selectedfile) {
       return;
     }
-    this.container.fileChunks = [];
-    this.container.hash = [];
-    this.container.chunkstatus.hash = '';
-    this.container.chunkstatus.progress = 0;
+    this.container = new Container();
     this.container.file = selectedfile;
   }
 
@@ -57,6 +54,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
       return;
     }
     this.container.fileChunks = await this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
+    this.status = Status.WaitHash;
   }
 
   // 对切片进行HASH值计算
@@ -64,13 +62,15 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     if (this.container.fileChunks.length === 0) {
       return;
     }
+    this.client.destroy();
     if (this.status === Status.WaitHash) {
-      this.status = await this.createWorker();
+      this.status = await this.runWorker();
+      console.log(this.container);
     }
   }
 
   // 使用web worker计算每个切片及整个文件的HASH值
-  async createWorker() {
+  async runWorker() {
     const arrh = [];
     await this.client.connect();
     await this.client.call(w => w.calculatefileHash(this.container.fileChunks));
@@ -98,6 +98,10 @@ export class BreakpointComponent implements OnInit, OnDestroy {
   }
 
   public handlePause() {
+
+  }
+
+  public handleCancel() {
 
   }
 

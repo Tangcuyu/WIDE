@@ -45,10 +45,11 @@ export enum Status {
 export class Container {
   constructor(
     public file: File = null,
-    public fileChunks = [],
+    public fileChunks: Blob[] = [],
     public files: File[] = [],
     public chunkstatus: ChunkStatus = new ChunkStatus(),
     public hash: string[] = [],
+    public uploadchunkres: UploadChunkResponse = {},
     public worker: Worker = null,
   ) {}
 }

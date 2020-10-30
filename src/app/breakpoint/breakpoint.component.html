@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row upload">
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <div style="height: 40px;">{{this.status.toString() | translate}}</div>
             <mat-card>
                 <input type="file" #file (change)="handleFileChange()">
@@ -16,8 +16,10 @@
                         (click)="handleUpload()">{{'pages.breakpoint.btnupload' | translate}}</button>
                     <button class="btn btn-danger" style="margin-right: 10px;"
                         (click)="handlePause()">{{'pages.breakpoint.btnpause' | translate}}</button>
-                    <button class="btn btn-warning"
+                    <button class="btn btn-warning" style="margin-right: 10px;"
                         (click)="handleResume()">{{'pages.breakpoint.btnresume' | translate}}</button>
+                    <button class="btn btn-secondary"
+                        (click)="handleCancel()">{{'pages.breakpoint.btncancel' | translate}}</button>
                 </div>
             </mat-card>
         </div>
@@ -53,6 +55,14 @@
     </div>
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
+    </div>
+    <div class="m-t m-b">
+        <div class="cube-container">
+            <div *ngFor="let reschunk of this.container.uploadchunkres.key;">
+                <button class="cube" style="background-color: #9be9a8;" [matTooltip]="reschunk"
+                    matTooltipPosition="above"></button>
+            </div>
+        </div>
     </div>
     <mat-progress-bar mode="determinate" value="30" color="warn"></mat-progress-bar>
 </div>

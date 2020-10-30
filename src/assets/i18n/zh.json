@@ -24,13 +24,14 @@
       "btnpause": "暂停",
       "btnslice": "切片",
       "btnresume": "恢复",
+      "btncancel": "取消",
       "hashcalculate": "Hash",
       "hashsubtitle":"(鼠标悬停在进度块上可以看到切片的hash值)",
       "chunknumber":"切片数量",
       "titleslice": "文件切片",
       "filehash":"整个文件的Hash值",
       "titlehash": "计算切片hash值",
-      "totalprogress": "总进度"
+      "totalprogress": "上传进度"
     }
   }
 }

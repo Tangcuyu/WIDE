@@ -24,7 +24,7 @@ export class FileUploadService {
   // 获取环境配置文件中的参数：后台API路径
   private storeApiPath: string = environment.storeApiPath;
   private verifyUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.verifyUpload;
-  private chunkUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkUpload;
+
 
 
   constructor(public apiProvider: ApiProvider, private http: HttpClient) { }
@@ -40,19 +40,19 @@ export class FileUploadService {
       );
   }
 
-  public prepareUploadData(container: Container, uploadedList: string[]): Observable<UploadData[]> {
-    return of(container.fileChunks.map(({ file }, index): UploadData => {
-      return {
-        filename: container.file.name,
-        fileHash: container.chunkstatus.hash,
-        chunkIndex: index,
-        chunkHash: container.chunkstatus.hash + '-' + index,
-        chunk: file,
-        chunkSize: file.size,
-        percentage: uploadedList.includes(container.chunkstatus.hash + '-' + index) ? 100 : 0,
-      };
-    }));
-  }
+  // public prepareUploadData(container: Container, uploadedList: string[]): Observable<UploadData[]> {
+  //   return of(container.fileChunks.map(({ file }, index): UploadData => {
+  //     return {
+  //       filename: container.file.name,
+  //       fileHash: container.chunkstatus.hash,
+  //       chunkIndex: index,
+  //       chunkHash: container.chunkstatus.hash + '-' + index,
+  //       chunk: file,
+  //       chunkSize: file.size,
+  //       percentage: uploadedList.includes(container.chunkstatus.hash + '-' + index) ? 100 : 0,
+  //     };
+  //   }));
+  // }
 
   public filterChunks(data: UploadData[], uploadedList: string[]): Observable<UploadData[]> {
     const requestList = data.filter(chunk => uploadedList.indexOf(chunk.chunkHash) === -1);
@@ -79,10 +79,11 @@ export class FileUploadService {
   }
 
   // 上传切片
-  public uploadChunks(chunk: UploadFormData): Observable<UploadChunkResponse> {
+  public uploadChunk(chunk: UploadFormData): Observable<UploadChunkResponse> {
+    const chunkUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkUpload;
     // this will be the our resulting map
     const status: UploadChunkResponse = {};
-    const req = new HttpRequest('POST', this.chunkUploadUrl, chunk.formData, {
+    const req = new HttpRequest('POST', chunkUploadUrl, chunk.formData, {
       reportProgress: true,
       responseType: 'text'
     });
@@ -109,6 +110,7 @@ export class FileUploadService {
     };
     return of(status);
   }
+
 
   // 通过队列来控制并发上传到服务器的切片数量
   public sendRequest() { }

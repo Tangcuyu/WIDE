@@ -24,13 +24,14 @@
       "btnpause": "Pause",
       "btnslice": "Slice",
       "btnresume": "Resume",
+      "btncancel": "Cancel",
       "hashcalculate": "Hash",
       "hashsubtitle":"(You can get hash value when you hovering)",
       "chunknumber":"Chunk number",
       "titleslice": "File Slice",
       "filehash":"Final File Hash",
       "titlehash": "Hash Compute for slice",
-      "totalprogress": "Total Progress"
+      "totalprogress": "Upload Progress"
     }
   }
 }
