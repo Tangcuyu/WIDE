@@ -3,10 +3,9 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppWorker } from '../app.worker';
 import { WorkerManager, WorkerClient } from 'angular-web-worker/angular';
 
-import { ChunkStatus, Container, Status, UploadData } from '../models/model';
+import { ChunkHashStatus, Container, Status, UploadData } from '../models/model';
 import { FilechunkService } from '../core/filechunk.service';
 import { FileUploadService } from '../core/fileupload.service';
-import { error } from 'protractor';
 
 @Component({
   selector: 'zsim-breakpoint',
@@ -46,6 +45,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     }
     this.container = new Container();
     this.container.file = selectedfile;
+    this.container.chunkstatus.chunkSize = this.chunkSize;
   }
 
   // 对选择的文件进行切片
@@ -62,7 +62,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     if (this.container.fileChunks.length === 0) {
       return;
     }
-    this.client.destroy();
+    this.client.destroy();  // 结束上次还没停止的HASH计算
     if (this.status === Status.WaitHash) {
       this.status = await this.runWorker();
       console.log(this.container);
@@ -89,7 +89,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
       return;
     }
     this.status = Status.Uploading;
-    // this.fileUploadService.uploadChunks(this.container);
+    this.fileUploadService.upload(this.container).subscribe();
   }
 
 
@@ -105,7 +105,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
 
   }
 
-  public getChunkClass(chunk: ChunkStatus) {
+  public getChunkClass(chunk: ChunkHashStatus) {
     return {
       uploading: chunk.progress > 0 && chunk.progress < 100,
       success: chunk.progress === 100,
@@ -113,7 +113,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     };
   }
 
-  public getChunkStyle(chunk: ChunkStatus) {
+  public getChunkStyle(chunk: ChunkHashStatus) {
     if (!chunk.progress) {
       return;
     }
@@ -124,6 +124,13 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     };
   }
 
+  public formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+
+    return value;
+  }
 
   ngOnDestroy() {
     this.client.destroy();

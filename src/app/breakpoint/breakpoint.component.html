@@ -56,13 +56,14 @@
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
     </div>
+    <mat-progress-bar mode="determinate" value="30" color="warn"></mat-progress-bar>
     <div class="m-t m-b">
-        <div class="cube-container">
-            <div *ngFor="let reschunk of this.container.uploadchunkres.key;">
-                <button class="cube" style="background-color: #9be9a8;" [matTooltip]="reschunk"
-                    matTooltipPosition="above"></button>
-            </div>
+        <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
+    </div>
+    <div class="m-t m-b">
+        <div *ngFor="let reschunk of this.container.fileChunks;">
+            <mat-slider thumbLabel [displayWith]="formatLabel" tickInterval="1000" min="1" max="100000">
+            </mat-slider>
         </div>
     </div>
-    <mat-progress-bar mode="determinate" value="30" color="warn"></mat-progress-bar>
 </div>

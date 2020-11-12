@@ -31,7 +31,8 @@
       "titleslice": "文件切片",
       "filehash":"整个文件的Hash值",
       "titlehash": "计算切片hash值",
-      "totalprogress": "上传进度"
+      "totalprogress": "上传总进度",
+      "chunkprogress": "单个切片上传进度"
     }
   }
 }

@@ -5,8 +5,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 
@@ -17,8 +20,10 @@ const Material = [
   MatDialogModule,
   MatDividerModule,
   MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatIconModule,
   MatInputModule,
+  MatSliderModule,
   MatTooltipModule,
 ];
 @NgModule({
