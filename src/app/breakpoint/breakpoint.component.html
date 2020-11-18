@@ -60,10 +60,4 @@
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
     </div>
-    <div class="m-t m-b">
-        <div *ngFor="let reschunk of this.container.fileChunks;">
-            <mat-slider thumbLabel [displayWith]="formatLabel" tickInterval="1000" min="1" max="100000">
-            </mat-slider>
-        </div>
-    </div>
 </div>

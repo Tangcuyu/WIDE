@@ -14,6 +14,7 @@ import { FileUploadService } from '../core/fileupload.service';
 })
 export class BreakpointComponent implements OnInit, OnDestroy {
   @ViewChild('file', { static: false }) file;
+
   public status: Status = Status.Normal;  // 应用的状态跟踪
   public container: Container = new Container();
   public chunkSize = 2 * 1024 * 1024; // 切片大小
