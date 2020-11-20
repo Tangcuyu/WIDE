@@ -12,6 +12,7 @@ import { AppWorker } from './app.worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreakpointModule } from './breakpoint/breakpoint.module';
 import { HomeModule } from './home/home.module';
+import { httpInterceptorProviders } from './http-interceptors/index';
 import { LayoutModule } from './layout/layout.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WorkerModule } from 'angular-web-worker/angular';
@@ -48,7 +49,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     LayoutModule,
     NgbModule,
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

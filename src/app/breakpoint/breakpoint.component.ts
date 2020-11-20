@@ -90,7 +90,11 @@ export class BreakpointComponent implements OnInit, OnDestroy {
       return;
     }
     this.status = Status.Uploading;
-    this.fileUploadService.upload(this.container).subscribe();
+    this.fileUploadService.upload(this.container).subscribe(
+      () => {},
+      error => console.log(error),
+      () => console.log('complete')
+    );
   }
 
 

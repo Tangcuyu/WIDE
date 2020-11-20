@@ -1,6 +1,6 @@
 import { UploadData, Container } from './../models/model';
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpEventType, HttpResponse, HttpEvent } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpEventType, HttpResponse, HttpEvent, HttpRequest, HttpClient } from '@angular/common/http';
 import { Observable, throwError, Subject, of, from, pipe} from 'rxjs';
 import { catchError, retry, map, switchMap, tap, count, filter } from 'rxjs/operators';
 import { ApiProvider } from './api.service';
@@ -13,7 +13,8 @@ import { extractComponentInlineTemplate } from '@biesbjerg/ngx-translate-extract
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'multipart/form-data'
+    'Content-Type': 'multipart/form-data',
+    responseType: 'text'
   })
 };
 
@@ -27,15 +28,16 @@ export class FileUploadService {
   private verifyUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.verifyUpload;
   private concurrency = 3;
 
-  constructor(public apiProvider: ApiProvider) { }
+  constructor(public apiProvider: ApiProvider, private http: HttpClient) { }
 
   public upload(container: Container): Observable<UploadChunkResponse> {
     const source$ = from(container.fileChunks);
     const uploadStream$ = source$.pipe(
       map( () =>  this.verifyUpload(container)),
-      debug('verifyUpload'),
+      // debug('verifyUpload'),
+      tap((d) => { this.apiProvider.httpGet(''); }),
       map((d, i) => this.prepareUploadData(container, i)),
-      debug('prepareUploadData'),
+      // debug('prepareUploadData'),
       map((d: UploadData) => this.createformData(d)),
       switchMap((chunk, index) => {
         return this.uploadChunk(chunk, index);
@@ -47,15 +49,27 @@ export class FileUploadService {
   // 上传切片
   public uploadChunk(chunk: UploadFormData, index: number): Observable<UploadChunkResponse> {
     const chunkUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkUpload;
-    return this.apiProvider.httpPost(chunkUploadUrl, chunk);
+    // return this.apiProvider.httpPost(chunkUploadUrl, chunk, httpOptions);
     // this will be the our resulting map
     // const status: UploadChunkResponse = {};
-    // const req = new HttpRequest('POST', chunkUploadUrl, chunk, {
-    //   reportProgress: true,
-    //   responseType: 'text'
-    // });
-    // const progress = new Subject<number>();
-    // const chunkUpload$ = this.http.request(req);
+    const req = new HttpRequest('POST', chunkUploadUrl, chunk, {
+      reportProgress: true,
+      responseType: 'text',
+    });
+    req.headers.set('Content-Type', 'multipart/form-data');
+    console.log(req.detectContentTypeHeader());
+
+    return this.http.request(req).pipe(
+      map((): UploadChunkResponse => {
+        return;
+       })
+    );
+    // // const progress = new Subject<number>();
+    // const chunkUpload$ = this.http.request(req).pipe(
+    //   map((): UploadChunkResponse => {
+    //     return;
+    //   }),
+    // );
     // .subscribe(
     //   (event) => {
     //     if (event.type === HttpEventType.UploadProgress) {
