@@ -14,7 +14,7 @@ export enum Status {
 export class Container {
   constructor(
     public file: File = null,
-    public fileChunks: Blob[] = [],
+    public fileChunks: {file: Blob}[] = [],
     public files: File[] = [],
     public chunkstatus: ChunkHashStatus = new ChunkHashStatus(),
     public hash: string[] = [],
@@ -26,11 +26,8 @@ export class Container {
 export interface UploadData {
   filename: string;
   fileHash: string;
-  chunkIndex: number;
-  chunkHash: string;
+  hash: string;
   chunk: Blob;
-  chunkSize: number;
-  percentage?: number;
 }
 
 export interface UploadVerifyResponse {
@@ -44,8 +41,6 @@ export interface UploadChunkResponse {
 
 export interface UploadFormData {
   formData: FormData;
-  filename: string;
-  chunkHash: string;
 }
 
 export class ChunkHashStatus {

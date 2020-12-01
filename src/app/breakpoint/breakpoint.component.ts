@@ -6,6 +6,7 @@ import { WorkerManager, WorkerClient } from 'angular-web-worker/angular';
 import { ChunkHashStatus, Container, Status, UploadData } from '../models/model';
 import { FilechunkService } from '../core/filechunk.service';
 import { FileUploadService } from '../core/fileupload.service';
+import { MessageService } from '../core/message.service';
 
 @Component({
   selector: 'zsim-breakpoint',
@@ -26,7 +27,8 @@ export class BreakpointComponent implements OnInit, OnDestroy {
   constructor(
     private fileChunkService: FilechunkService,
     private workerManager: WorkerManager,
-    private fileUploadService: FileUploadService) { }
+    private fileUploadService: FileUploadService,
+    public messageService: MessageService) { }
 
   ngOnInit() {
     if (this.workerManager.isBrowserCompatible) {
@@ -91,9 +93,9 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     }
     this.status = Status.Uploading;
     this.fileUploadService.upload(this.container).subscribe(
-      () => {},
+      (r) => console.log(r),
       error => console.log(error),
-      () => console.log('complete')
+      () => {}
     );
   }
 

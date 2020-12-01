@@ -11,8 +11,8 @@ export class FilechunkService {
   constructor() { }
 
   // 对文件进行切片
-  public createFileChunk(file: any, sliceSize: number): Array<Blob> {
-    const fileChunkList = [];
+  public createFileChunk(file: any, sliceSize: number): Array<{file: Blob}> {
+    const fileChunkList: {file: Blob}[]  = [];
     let cur = 0;
     while (cur < file.size) {
       fileChunkList.push({

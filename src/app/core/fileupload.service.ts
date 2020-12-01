@@ -1,23 +1,22 @@
-import { UploadData, Container } from './../models/model';
-import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpEventType, HttpResponse, HttpEvent, HttpRequest, HttpClient } from '@angular/common/http';
-import { Observable, throwError, Subject, of, from, pipe} from 'rxjs';
-import { catchError, retry, map, switchMap, tap, count, filter } from 'rxjs/operators';
 import { ApiProvider } from './api.service';
 import { AppConst, UploadFormData, UploadVerifyResponse, UploadChunkResponse } from '../models/model';
-import { environment } from '../../environments/environment';
+import { catchError, retry, map, concatMap, mergeMap, last, tap, count, filter } from 'rxjs/operators';
 import { debug } from './debug.service';
+import { environment } from '../../environments/environment';
+import { HttpErrorResponse, HttpHeaders, HttpEventType, HttpResponse, HttpEvent, HttpRequest, HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MessageService } from './message.service';
+import { Observable, throwError, Subject, of, from, concat, pipe} from 'rxjs';
+import { UploadData, Container } from './../models/model';
+
 
 // TODO: This is prepare for the i18n
 import { extractComponentInlineTemplate } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'multipart/form-data',
-    responseType: 'text'
-  })
+  reportProgress: true,
+  responseType: 'text'
 };
-
 
 @Injectable({
   providedIn: 'root'
@@ -33,37 +32,30 @@ export class FileUploadService {
   public upload(container: Container): Observable<UploadChunkResponse> {
     const source$ = from(container.fileChunks);
     const uploadStream$ = source$.pipe(
-      map( () =>  this.verifyUpload(container)),
-      // debug('verifyUpload'),
-      tap((d) => { this.apiProvider.httpGet(''); }),
-      map((d, i) => this.prepareUploadData(container, i)),
-      // debug('prepareUploadData'),
-      map((d: UploadData) => this.createformData(d)),
-      switchMap((chunk, index) => {
-        return this.uploadChunk(chunk, index);
-      })
+      // map( () =>  this.verifyUpload(container)),
+      map((d, i) => this.prepareUploadData(container, d.file, i)),
+      mergeMap((formData) => {
+        return this.uploadChunk(formData);
+      }),
     );
-    return uploadStream$;
+    const mergeChunks$ = this.mergeRequest(container);
+    return concat(uploadStream$, mergeChunks$);
   }
 
   // 上传切片
-  public uploadChunk(chunk: UploadFormData, index: number): Observable<UploadChunkResponse> {
+  public uploadChunk(chunk: FormData): Observable<any> {
     const chunkUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkUpload;
-    // return this.apiProvider.httpPost(chunkUploadUrl, chunk, httpOptions);
+    return this.apiProvider.httpPost(chunkUploadUrl, chunk, httpOptions);
     // this will be the our resulting map
     // const status: UploadChunkResponse = {};
-    const req = new HttpRequest('POST', chunkUploadUrl, chunk, {
-      reportProgress: true,
-      responseType: 'text',
-    });
-    req.headers.set('Content-Type', 'multipart/form-data');
-    console.log(req.detectContentTypeHeader());
+    // httpOptions.headers = httpOptions.headers.set('Content-Type',  'multipart/form-data');
+    // const req = new HttpRequest('POST', chunkUploadUrl, chunk, {
+    //   reportProgress: true
+    // });
 
-    return this.http.request(req).pipe(
-      map((): UploadChunkResponse => {
-        return;
-       })
-    );
+    // console.log(req.detectContentTypeHeader());
+
+    // return this.http.request(req);
     // // const progress = new Subject<number>();
     // const chunkUpload$ = this.http.request(req).pipe(
     //   map((): UploadChunkResponse => {
@@ -88,11 +80,11 @@ export class FileUploadService {
   }
 
   // 向服务器发送合并切片的请求
-  public mergeRequest(container: Container, chunksize: number): Observable<string> {
+  public mergeRequest(container: Container): Observable<string> {
     const chunkMergeUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkMerge;
     return this.apiProvider.httpPost(chunkMergeUrl, {
       filename: container.file.name,
-      size: chunksize,
+      size: container.chunkstatus.chunkSize,
       fileHash: container.chunkstatus.hash
     });
   }
@@ -113,38 +105,21 @@ export class FileUploadService {
       );
   }
 
-  private prepareUploadData(container: Container, index: number): UploadData {
-    const uploadData = {
-      filename: container.file.name,
-      fileHash: container.chunkstatus.hash,
-      chunkIndex: index,
-      chunkHash: container.chunkstatus.hash + '-' + index,
-      chunk: container.fileChunks[index],
-      chunkSize: container.chunkstatus.chunkSize,
-    };
-    return uploadData;
-  }
-
-  private filterChunks(data: UploadData[], uploadedList: string[]): Observable<UploadData[]> {
-    const requestList = data.filter(chunk => uploadedList.indexOf(chunk.chunkHash) === -1);
-    return of(requestList);
-  }
-
-  // 生成上传表单数据
-  private createformData(d: UploadData) {
-    const result: UploadFormData = {
-      formData: new FormData(),
-      filename: '',
-      chunkHash: ''
-    };
-    result.filename = d.filename;
-    result.chunkHash = d.chunkHash;
-    result.formData.append('filename', d.filename);
-    result.formData.append('fileHash', d.fileHash);
-    result.formData.append('hash', d.chunkHash);
-    result.formData.append('chunk', d.chunk);
+  private prepareUploadData(container: Container, chunk: Blob, index: number): FormData {
+    const result = new FormData();
+    result.append('filename', container.file.name);
+    result.append('fileHash', container.chunkstatus.hash);
+    result.append('hash', container.chunkstatus.hash + '-' + index);
+    result.append('chunk', chunk);
     return result;
   }
+
+  // private filterChunks(data: UploadData[], uploadedList: string[]): Observable<UploadData[]> {
+  //   const requestList = data.filter(chunk => uploadedList.indexOf(chunk.chunkName) === -1);
+  //   return of(requestList);
+  // }
+
+  // 生成上传表单数据
 
   // 通过队列来控制并发上传到服务器的切片数量
   private sendRequest() { }

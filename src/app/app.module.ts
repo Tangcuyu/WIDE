@@ -14,14 +14,9 @@ import { BreakpointModule } from './breakpoint/breakpoint.module';
 import { HomeModule } from './home/home.module';
 import { httpInterceptorProviders } from './http-interceptors/index';
 import { LayoutModule } from './layout/layout.module';
+import { MessageService } from './core/message.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WorkerModule } from 'angular-web-worker/angular';
-
-
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -50,8 +45,15 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NgbModule,
   ],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
