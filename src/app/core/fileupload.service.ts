@@ -1,6 +1,6 @@
 import { ApiProvider } from './api.service';
 import { AppConst, UploadFormData, UploadVerifyResponse, UploadChunkResponse } from '../models/model';
-import { catchError, retry, map, concatMap, mergeMap, last, tap, count, filter } from 'rxjs/operators';
+import { catchError, retry, map, concatMap, mergeMap, mergeAll, last, tap, count, filter } from 'rxjs/operators';
 import { debug } from './debug.service';
 import { environment } from '../../environments/environment';
 import { HttpErrorResponse, HttpHeaders, HttpEventType, HttpResponse, HttpEvent, HttpRequest, HttpClient } from '@angular/common/http';

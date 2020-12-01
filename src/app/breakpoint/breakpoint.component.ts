@@ -18,7 +18,8 @@ export class BreakpointComponent implements OnInit, OnDestroy {
 
   public status: Status = Status.Normal;  // 应用的状态跟踪
   public container: Container = new Container();
-  public chunkSize = 2 * 1024 * 1024; // 切片大小
+  public chunkSize = 0.2 * 1024 * 1024; // 切片大小
+  public btnStatus = false;
   private client: WorkerClient<AppWorker>;
   private uploadData: UploadData[]; // 准备上传的数据
   private uploadedList = []; // 已经上传完成的切片列表
@@ -28,7 +29,8 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     private fileChunkService: FilechunkService,
     private workerManager: WorkerManager,
     private fileUploadService: FileUploadService,
-    public messageService: MessageService) { }
+    public messageService: MessageService,
+   ) { }
 
   ngOnInit() {
     if (this.workerManager.isBrowserCompatible) {

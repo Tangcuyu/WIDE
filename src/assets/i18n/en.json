@@ -32,7 +32,9 @@
       "filehash":"Final File Hash",
       "titlehash": "Hash Compute for slice",
       "totalprogress": "Total Upload Progress",
-      "chunkprogress": "Slice upload progress"
+      "chunkprogress": "Slice upload progress",
+      "httpmessages": "Http Messages",
+      "httpBtnClear": "Clear"
     }
   }
 }

@@ -8,7 +8,7 @@
                         [disabled]="!this.container.file"
                         (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
                     <button class="btn btn-info" style="margin-right: 10px;"
-                        [disabled]="this.container.fileChunks.length === 0"
+                        [disabled]="!this.btnStatus"
                         (click)="hashCalculate()">{{'pages.breakpoint.hashcalculate' | translate}}</button>
                     <button class="btn btn-primary" style="margin-right: 10px;"
                         [disabled]="this.container.chunkstatus.progress !== 100"
@@ -24,7 +24,6 @@
         </div>
     </div>
     <mat-divider></mat-divider>
-    <div style="height: 40px;">{{this.status.toString() | translate}}</div>
     <div class="m-t m-b">
         <h5>{{'pages.breakpoint.titleslice' | translate}}</h5>
     </div>
@@ -61,8 +60,8 @@
         <h5>{{'pages.breakpoint.totalprogress' | translate}}</h5>
     </div>
     <div *ngIf="messageService.messages.length">
-        <h3>Messages</h3>
-        <button class="clear" (click)="messageService.clear()">clear</button>
+        <h3>{{'pages.breakpoint.httpmessages' | translate}}</h3>
+        <button class="clear" (click)="messageService.clear()">{{'pages.breakpoint.httpBtnClear' | translate}}</button>
         <br>
         <ol>
             <li *ngFor='let message of messageService.messages'> {{message}} </li>
