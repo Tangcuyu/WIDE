@@ -29,7 +29,7 @@ export class FileUploadService {
 
   constructor(public apiProvider: ApiProvider, private http: HttpClient) { }
 
-  public upload(container: Container): Observable<UploadChunkResponse> {
+  public upload(container: Container): Observable<string> {
     const source$ = from(container.fileChunks);
     const uploadStream$ = source$.pipe(
       // map( () =>  this.verifyUpload(container)),
@@ -37,13 +37,15 @@ export class FileUploadService {
       mergeMap((formData) => {
         return this.uploadChunk(formData);
       }),
+      mergeAll(this.concurrency)
     );
     const mergeChunks$ = this.mergeRequest(container);
+
     return concat(uploadStream$, mergeChunks$);
   }
 
   // 上传切片
-  public uploadChunk(chunk: FormData): Observable<any> {
+  public uploadChunk(chunk: FormData): Observable<string> {
     const chunkUploadUrl = this.storeApiPath + AppConst.STORE_API_PATHS.chunkUpload;
     return this.apiProvider.httpPost(chunkUploadUrl, chunk, httpOptions);
     // this will be the our resulting map

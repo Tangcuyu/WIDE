@@ -8,7 +8,7 @@
                         [disabled]="!this.container.file"
                         (click)="handleSlice()">{{'pages.breakpoint.btnslice' | translate}}</button>
                     <button class="btn btn-info" style="margin-right: 10px;"
-                        [disabled]="!this.btnStatus"
+                        [disabled]="!(this.btnStatus === 1)"
                         (click)="hashCalculate()">{{'pages.breakpoint.hashcalculate' | translate}}</button>
                     <button class="btn btn-primary" style="margin-right: 10px;"
                         [disabled]="this.container.chunkstatus.progress !== 100"
