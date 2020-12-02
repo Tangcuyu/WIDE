@@ -18,7 +18,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
 
   public status: Status = Status.Normal;  // 应用的状态跟踪
   public container: Container = new Container();
-  public chunkSize = 0.2 * 1024 * 1024; // 切片大小
+  public chunkSize: number = Math.floor(0.2 * 1024 * 1024); // 切片大小
   public btnStatus: Status = Status.Normal;
   private client: WorkerClient<AppWorker>;
   private uploadData: UploadData[]; // 准备上传的数据
@@ -60,6 +60,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     }
     this.container.fileChunks = await this.fileChunkService.createFileChunk(this.container.file, this.chunkSize);
     this.status = Status.WaitHash;
+    this.btnStatus = Status.Normal;
   }
 
   // 对切片进行HASH值计算
@@ -68,6 +69,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
       return;
     }
     this.client.destroy();  // 结束上次还没停止的HASH计算
+    this.btnStatus = Status.WaitHash;
     if (this.status === Status.WaitHash) {
       this.status = await this.runWorker();
       console.log(this.container);
@@ -95,9 +97,9 @@ export class BreakpointComponent implements OnInit, OnDestroy {
     }
     this.status = Status.Uploading;
     this.fileUploadService.upload(this.container).subscribe(
-      (r) => console.log(r),
+      () => {},
       error => console.log(error),
-      () => {}
+      () => console.log('complate')
     );
   }
 

@@ -37,7 +37,7 @@ export class FileUploadService {
       mergeMap((formData) => {
         return this.uploadChunk(formData);
       }),
-      mergeAll(this.concurrency)
+      // mergeAll(this.concurrency)
     );
     const mergeChunks$ = this.mergeRequest(container);
 
