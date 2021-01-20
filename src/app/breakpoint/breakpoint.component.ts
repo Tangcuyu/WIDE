@@ -18,7 +18,7 @@ export class BreakpointComponent implements OnInit, OnDestroy {
 
   public status: Status = Status.Normal;  // 应用的状态跟踪
   public container: Container = new Container();
-  public chunkSize: number = Math.floor(2 * 1024 * 1024); // 切片大小
+  public chunkSize: number = Math.floor(4 * 1024 * 1024); // 切片大小
   public btnStatus: Status = Status.Normal;
   private client: WorkerClient<AppWorker>;
   private uploadData: UploadData[]; // 准备上传的数据
